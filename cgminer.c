@@ -78,6 +78,8 @@ char *curly = ":D";
 
 #if defined(USE_BITFORCE) || defined(USE_ICARUS) || defined(USE_AVALON) || defined(USE_MODMINER)
 #	define USE_FPGA
+#elif defined(USE_ZTEX)
+#	define USE_FPGA
 #endif
 
 struct strategies strategies[] = {
@@ -1600,6 +1602,9 @@ static char *opt_verusage_and_exit(const char *extra)
 #endif
 #ifdef USE_SCRYPT
 		"scrypt "
+#endif
+#ifdef USE_ZTEX
+		"ztex "
 #endif
 		"mining support.\n"
 		, packagename);

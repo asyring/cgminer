@@ -131,6 +131,10 @@ static inline int fsync (int fd)
   #include <libusb.h>
 #endif
 
+#ifdef USE_ZTEX
+  #include "libztex.h"
+#endif
+
 #ifdef USE_USBUTILS
   #include "usbutils.h"
 #endif
@@ -233,7 +237,8 @@ static inline int fsync (int fd)
 #define FPGA_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
 	DRIVER_ADD_COMMAND(bitforce) \
 	DRIVER_ADD_COMMAND(icarus) \
-	DRIVER_ADD_COMMAND(modminer)
+	DRIVER_ADD_COMMAND(modminer) \
+	DRIVER_ADD_COMMAND(ztex)
 
 #define ASIC_PARSE_COMMANDS(DRIVER_ADD_COMMAND) \
 	DRIVER_ADD_COMMAND(bflsc) \
@@ -461,9 +466,14 @@ struct cgpu_info {
 	char *name;
 	char *device_path;
 	void *device_data;
-#ifdef USE_USBUTILS
-	struct cg_usb_device *usbdev;
+	union {
+#ifdef USE_ZTEX
+		struct libztex_device *device_ztex;
 #endif
+#ifdef USE_USBUTILS
+		struct cg_usb_device *usbdev;
+#endif
+	};
 #ifdef USE_AVALON
 	struct work **works;
 	int work_array;
